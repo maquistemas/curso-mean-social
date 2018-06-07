@@ -10,7 +10,7 @@ mongoose.Promise = global.Promise;
 //ADVERTENCIA: La opción `useMongoClient` ya no es necesaria en mongoose 5.x, elimínela.
 mongoose.connect('mongodb://localhost:27017/curso_mean_social')
 	.then(() => {
-		console.log("La conexión a la bd curso_mean_social se ha realizado correctamente!");
+		console.log("La conexiónn a la bd curso_mean_social se ha realizado correctamente!");
 
 		//Crear servidor
 		app.listen(port, () => {

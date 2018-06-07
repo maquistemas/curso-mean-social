@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 //cargar rutas
-var user_routes = require('./routes/user');
+
 
 //middlewares (son métodos que se ejecutan antes que lleguen a un controlador
 //en cada petición se va ejecutar el middlewares
@@ -17,7 +17,11 @@ app.use(bodyParser.json());
 //cors
 
 //rutas
-app.use('/api', user_routes);
+app.get('/pruebas', (req, res) => {
+	res.status(200).send({
+		message: 'Accion de pruebas en el servidor NodeJS'
+	});
+});
 
 
 //exportar

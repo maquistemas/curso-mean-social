@@ -90,6 +90,7 @@ function loginUser(req, res){
 			bcrypt.compare(password, user.password, (err, check) => {
 				if (check) {
 					//devolver datos de usuario
+					user.password = undefined;
 					return res.status(200).send({user});
 				}else{
 					return res.status(404).send({message: 'El usuario no se ha podido identificar'});

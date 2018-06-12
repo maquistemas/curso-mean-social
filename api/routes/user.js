@@ -12,5 +12,7 @@ api.post('/register',UserController.saveUser);
 api.post('/login',UserController.loginUser);
 api.get('/user/:id', md_auth.ensureAuth, UserController.getUser);
 api.get('/users/:page?', md_auth.ensureAuth, UserController.getUsers);//El signo ? se refiere a que es opcional
+api.put('/update-user/:id', md_auth.ensureAuth, UserController.updateUser);
+
 
 module.exports =api;

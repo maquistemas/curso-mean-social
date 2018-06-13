@@ -211,16 +211,24 @@ function uploadImage(req, res){
 
 
 			if(userId != req.user.sub){
-			   removeFilesOfUploads(res, file_path, 'No tienes permiso para actualizar los datos del usuario');
+			   return removeFilesOfUploads(res, file_path, 'No tienes permiso para actualizar los datos del usuario');
 			}
 
 
 			if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'jpeg' || file_ext == 'gif'){
+				
 				//Actualizar documento de usuario logueado
+				User.findByIdAndUpdate(userId, {image: file_name}, {new:true}, (err,userUpdated) => {
+					if(err) return res.status(500).send({message: 'Error en la aplicación'});
+
+					if(!userUpdated) return res.status(404).send({message: 'no se ha podido actualizar el usuario'});
+
+					return res.status(200).send({user: userUpdated});
+				});
 
 
 			}else{
-				removeFilesOfUploads(res, file_path, 'Extensión no válida');
+				return removeFilesOfUploads(res, file_path, 'Extensión no válida');
 
 			}
 

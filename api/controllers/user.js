@@ -7,6 +7,8 @@ var fs = require('fs');//permite trabajar con archivos
 var path = require('path');//permite trabajarcon rutas de ficheros
 
 var User = require('../models/user');
+var Follow = require('../models/follow');
+
 var jwt = require('../services/jwt');
 
 //Métodos de prueba
@@ -134,7 +136,13 @@ function getUser(req, res){
 
 		if(!user) return res.status(404).send({message: 'El usuario no existe'});
 
-		return res.status(200).send({user});
+		Follow.findOne({"user":req.user.sub, "followed":userId}).exec((err, follow) => {
+			if(err) return res.status(500).send({message: 'Error al comprobar el seguimiento'});
+			
+			return res.status(200).send({user, follow});
+		});
+
+		
 	});
 
 }

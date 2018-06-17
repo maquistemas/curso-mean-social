@@ -181,7 +181,7 @@ async function followThisUser(identity_user_id, user_id){
                 return following;
             })
             .catch((err)=>{
-                return handleerror(err);
+                return handleError(err);
             });
 
         var followed = await Follow.findOne({ user: user_id, followed: identity_user_id}).exec()
@@ -190,7 +190,7 @@ async function followThisUser(identity_user_id, user_id){
                 return followed;
             })
             .catch((err)=>{
-                return handleerror(err);
+                return handleError(err);
             });
         return {
             following: following,
@@ -276,16 +276,16 @@ async function followUserIds(user_id){
 			    return follows;
 			})
 			.catch((err)=>{
-			return handleError(err)
+				return handleError(err)
 			});
 
 		var followed = await Follow.find({"followed":user_id}).select({'_id':0, '__v':0, 'followed':0}).exec()
 			.then((follows)=>{
-			  return follows;
-			  })
-			  .catch((err)=>{
-			  return handleError(err)
-			  });
+			  	return follows;
+			 })
+			.catch((err)=>{
+			  	return handleError(err)
+			 });
             
         //Procesar following Ids
         var following_clean = [];
@@ -303,24 +303,88 @@ async function followUserIds(user_id){
             
       
         return {
-                 following: following_clean,
-                 followed: followed_clean
+                following: following_clean,
+                followed: followed_clean
                }
       
-      } catch(e){
-      console.log(e);
-      }
+    } catch(e){
+      	console.log(e);
+    }
 }
 
 
 
+//Devuelve el contador de cuanta gente nos sigue cuantas seguimos
+function getCounters(req, res){
+	var userId = req.user.sub;
+	if(req.params.id){
+		userId = req.params.id;
+	}
+
+	getCountFollow(userId).then((value) => {
+		return res.status(200).send(value);
+	});
+
+}
+
+/*
+async function getCountFollow(user_id){
+	var following = await Follow.count({"user":user_id}).exec((err, count) => {
+		if(err) return handleError(err);
+		return count;
+	});
+
+	var followed = await Follow.count({"followed": user_id}).exec((err, count) => {
+		if(err) return handleError(err);
+		return count;
+	});
+
+	return{
+		following: following,
+		followed: followed
+	}
+}
+*/
+
+async function getCountFollow(user_id){
+
+ try{
+
+  	var following = await Follow.count({"user":user_id}).exec()
+		.then((count) => {
+			return count;
+		}).catch((err) =>{
+			return handleError(err);
+		});
+	
+
+	var followed = await Follow.count({"followed": user_id}).exec()
+		.then((count) => {
+			return count;
+		}).catch((err) => {
+			return handleError(err);
+		});
+
+
+	return{
+		following: following,
+		followed: followed
+	}
+
+
+ }catch(e){
+  	console.log(e);
+ }
+
+	
+
+}
 
 
 //Edición de datos de usuario
 function updateUser(req, res){
 	var userId = req.params.id;
 	var update = req.body;
-
 
 	//borrar propiedad password
 	delete update.password;
@@ -417,6 +481,7 @@ module.exports = {
 	loginUser,
 	getUser,
 	getUsers,
+	getCounters,
 	updateUser,
 	uploadImage,
 	getImageFile

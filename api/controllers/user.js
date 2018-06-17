@@ -137,6 +137,8 @@ function getUser(req, res){
 		if(!user) return res.status(404).send({message: 'El usuario no existe'});
 
 		followThisUser(req.user.sub, userId).then((value) => {
+			user.password = undefined;
+
 			return res.status(200).send({
 				user, 
 				following: value.following,
@@ -181,6 +183,7 @@ async function followThisUser(identity_user_id, user_id){
             .catch((err)=>{
                 return handleerror(err);
             });
+
         var followed = await Follow.findOne({ user: user_id, followed: identity_user_id}).exec()
             .then((followed) => {
                 console.log(followed);
@@ -217,15 +220,100 @@ function getUsers(req, res){
 
 		if(!users) return res.status(404).send({message: 'No hay usuarios disponibles'});
 
-		return res.status(200).send({
+		followUserIds(identity_user_id).then((value) => {
+			
+			return res.status(200).send({
 			users,
+			users_following: value.following,
+			users_follow_me: value.followed,
 			total,
 			pages: Math.ceil(total/itemsPerPage)
+		   });
+
 		});
+		
 
 	});
 
 }
+
+
+/*
+async function followUserIds(user_id){
+	var following = await Follow.find({"user": user_id}).select({'_id':0, '__v':0, 'user':0}).exec((err, follows) =>{
+		var follows_clean = [];
+
+		follows.forEach((follow) => {
+			follows_clean.push(follow.followed);
+		});
+
+		return follows_clean;
+	});
+
+	var followed = await Follow.find({"followed": user_id}).select({'_id':0, '__v':0, 'followed':0}).exec((err, follows) =>{
+		var follows_clean = [];
+
+		follows.forEach((follow) => {
+			follows_clean.push(follow.user);
+		});
+
+		return follows_clean;
+	});
+
+	return {
+		following: following,
+		followed: followed
+	}
+}
+*/
+
+
+
+async function followUserIds(user_id){
+	try{
+		var following = await Follow.find({"user":user_id}).select({'_id':0, '__v':0, 'user':0}).exec() 
+			.then((follows) => {
+			    return follows;
+			})
+			.catch((err)=>{
+			return handleError(err)
+			});
+
+		var followed = await Follow.find({"followed":user_id}).select({'_id':0, '__v':0, 'followed':0}).exec()
+			.then((follows)=>{
+			  return follows;
+			  })
+			  .catch((err)=>{
+			  return handleError(err)
+			  });
+            
+        //Procesar following Ids
+        var following_clean = [];
+      
+	        following.forEach((follow) => {
+	             following_clean.push(follow.followed);
+	         });    
+ 
+        //Procesar followed Ids
+        var followed_clean = [];
+        
+	        followed.forEach((follow) => {
+	              followed_clean.push(follow.user);
+	        });                
+            
+      
+        return {
+                 following: following_clean,
+                 followed: followed_clean
+               }
+      
+      } catch(e){
+      console.log(e);
+      }
+}
+
+
+
 
 
 //Edición de datos de usuario

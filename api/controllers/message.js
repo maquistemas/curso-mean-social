@@ -99,10 +99,25 @@ function getUnviewedMessages(req, res){
 	});
 }
 
+
+function setviewedMessages(req, res){
+	var userId = req.user.sub;
+
+	Message.update({receiver:userId, viewed:'false'}, {viewed:'true'}, {"multi":true}, (err, messageUpdated) => {
+		if(err) return res.status(500).send({message: 'Error en la petición'});
+
+		return res.status(200).send({
+			messages: messageUpdated
+		});
+	});
+}
+
+
 module.exports = {
 	probando,
 	saveMessage,
 	getReceivedMessages,
 	getEmmitMessages,
-	getUnviewedMessages
+	getUnviewedMessages,
+	setviewedMessages
 }

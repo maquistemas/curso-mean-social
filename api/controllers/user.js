@@ -420,22 +420,17 @@ function uploadImage(req, res){
 		
 		if(req.files){
 			var file_path = req.files.image.path;
-			console.log('>>>>>>>>>>>>1>>>>>>>>>>>');
 			console.log(file_path);
-			//var file_split = file_path.split('\\');//windows
-			var file_split = file_path.split('/');//linux
-			console.log('>>>>>>>>>>>>2>>>>>>>>>>>');
+			//var file_split = file_path.split('\\');//Windows
+			var file_split = file_path.split('/');//Linux
 			console.log(file_split);
 
 			var file_name = file_split[2];
-			console.log('>>>>>>>>>>>>3>>>>>>>>>>>');
 			console.log(file_name);
 
 			var ext_split = file_name.split('\.');
-			console.log('>>>>>>>>>>>>4>>>>>>>>>>>');
 			console.log(ext_split);
 			var file_ext = ext_split[1];
-			console.log('>>>>>>>>>>>>5>>>>>>>>>>>');
 			console.log(file_ext);
 
 

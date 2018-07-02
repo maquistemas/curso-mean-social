@@ -6,6 +6,8 @@ var mongoosePaginate = require('mongoose-pagination');
 var User = require('../models/user');
 var Follow = require('../models/follow');
 
+/* Método para seguir a una persona
+*/
 function saveFollow(req, res){
 	var params = req.body;
 	var follow = new Follow();
@@ -23,7 +25,8 @@ function saveFollow(req, res){
 }
 
 
-
+/* Método para dejar de seguir a una persona
+*/
 function deleteFollow(req, res){
 	var userId = req.user.sub;
 	var followId = req.params.id;
@@ -34,7 +37,8 @@ function deleteFollow(req, res){
 	}); 
 }
 
-
+/* Método para obtener las personas que estoy siguiendo
+*/
 function getFollowingUsers(req, res){
 	var userId = req.user.sub;
 
@@ -65,7 +69,8 @@ function getFollowingUsers(req, res){
 	});
 }
 
-
+/*Método para obtener los usuarios que nos siguen
+*/
 function getFollowedUsers(req, res){
 	var userId = req.user.sub;
 
@@ -99,7 +104,8 @@ function getFollowedUsers(req, res){
 }
 
 
-//Devolver listado de usuarios 
+/* Método para obtener personas que me siguen
+*/
 function getMyFollows(req,res){
 	var userId = req.user.sub;
 

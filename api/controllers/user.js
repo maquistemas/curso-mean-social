@@ -176,7 +176,7 @@ async function followThisUser(identity_user_id, user_id){
 
 async function followThisUser(identity_user_id, user_id){
     try {
-        var following = await Follow.findOne({ user: identity_user_id, followed: user_id}).exec()
+        var following = await Follow.findOne({ "user": identity_user_id, "followed": user_id}).exec()
             .then((following) => {
                 console.log(following);
                 return following;
@@ -185,7 +185,7 @@ async function followThisUser(identity_user_id, user_id){
                 return handleError(err);
             });
 
-        var followed = await Follow.findOne({ user: user_id, followed: identity_user_id}).exec()
+        var followed = await Follow.findOne({ "user": user_id, "followed": identity_user_id}).exec()
             .then((followed) => {
                 console.log(followed);
                 return followed;

@@ -448,7 +448,7 @@ function uploadImage(req, res){
 
 			var ext_split = file_name.split('\.');
 			console.log(ext_split);
-			var file_ext = ext_split[1];
+			var file_ext = ext_split[1].toLowerCase();
 			console.log(file_ext);
 
 

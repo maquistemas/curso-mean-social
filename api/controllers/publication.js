@@ -162,7 +162,7 @@ function uploadImage(req, res){
 			//var file_split = file_path.split('/');//Linux
 			var file_name = file_split[2];
 			var ext_split = file_name.split('\.');
-			var file_ext = ext_split[1];
+			var file_ext = ext_split[1].toLowerCase();
 					
 			if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'jpeg' || file_ext == 'gif'){
 				

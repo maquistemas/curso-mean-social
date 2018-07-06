@@ -439,8 +439,8 @@ function uploadImage(req, res){
 		if(req.files){
 			var file_path = req.files.image.path;
 			console.log(file_path);
-			var file_split = file_path.split('\\');//Windows
-			//var file_split = file_path.split('/');//Linux
+			//var file_split = file_path.split('\\');//Windows
+			var file_split = file_path.split('/');//Linux
 			console.log(file_split);
 
 			var file_name = file_split[2];
